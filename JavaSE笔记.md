@@ -846,9 +846,11 @@ final Node<K,V>[] resize() {
         int oldCap = (oldTab == null) ? 0 : oldTab.length;//扩容前的长度
         int oldThr = threshold;//扩容前的临界值
         int newCap, newThr = 0;
+        //判断数组容量是否大于0，大于0说明数组已经初始化过
         if (oldCap > 0) {
-            //如果扩容前的长度大于等于数组容量(64)的最大值，就不再扩充
+            //判断当前数组长度是否大于最大数组长度
             if (oldCap >= MAXIMUM_CAPACITY) {
+                //如果是，将扩容阈值直接设置为int类型的最大数值并直接返回
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
             }

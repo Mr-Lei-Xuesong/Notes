@@ -98,7 +98,7 @@
 2. 创建实例并启动
 
    ```shell
-   docker run -p 3306:3306 --name mysql -v /mydata/mysql/log:/var/log/mysql -v /mydata/mysql/data:/var/lib/mysql -v /mydata/mysql/conf:/etc/mysql -e MYSQL_ROOT_PASSWORD=密码 -d mysql:5.7
+   docker run -p 3306:3306 --name mysql -v /home/mysql/log:/var/log/mysql -v /home/mysql/data:/var/lib/mysql -v /home/mysql/conf:/etc/mysql -e MYSQL_ROOT_PASSWORD=leixuesong -d mysql:5.7
    ```
 
    * `-p 3306:3306`：将容器的3306端口映射到主机的3306端口
@@ -110,7 +110,7 @@
 3. MySQL的配置
 
    ```shell
-   vim /mydata/mysql/conf/my.cnf
+   vim /home/mysql/conf/my.cnf
    ```
 
    ```shell
@@ -152,15 +152,16 @@
 2. 创建实例并启动
 
    ```shell
-   mkdir -p /mydata/redis/conf
-   touch /mydata/redis/conf/redis.conf
-   docker run -p 6379:6379 --name redis -v /mydata/redis/data:/data -v /mydata/redis/conf/redis.conf:/etc/redis/redis.conf -d redis redis-server /etc/redis/redis.conf
+   mkdir -p /home/redis/conf
+   touch /home/redis/conf/redis.conf
+   
+   docker run -p 6379:6379 --name redis -v /home/redis/data:/data -v /home/redis/conf/redis.conf:/etc/redis/redis.conf -d redis redis-server /etc/redis/redis.conf
    ```
 
 3. Redis的配置
 
    ```shell
-   vim /mydata/redis/conf/redis.conf
+   vim /home/redis/conf/redis.conf
    ```
 
    ```shell
@@ -223,8 +224,11 @@
 2. 创建实例并启动
 
    ```shel
-   chmod 777 /mydata/jenkins/jenkins_home
-   docker run -d -uroot -p 9999:8080 -p 50000:50000 -v /mydata/jenkins/jenkins_home:/var/jenkins_home -v /mydata/maven:/usr/local/maven -v /mydata/git/bin/git:/usr/local/git -v /etc/localtime:/etc/localtime --name jenkins jenkins/jenkins:2.385
+   chmod 777 /home/jenkins
+   docker run -d -uroot -p 9999:8080 -p 50000:50000 -v /home/jenkins/jenkins_home:/var/jenkins_home -v /home/maven:/usr/local/maven -v /home/git/bin/git:/usr/local/git -v /etc/localtime:/etc/localtime --name jenkins jenkins/jenkins:2.385
+   
+   docker run -d -it -p 9999:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u 0  -v  /home/maven:/usr/local/maven   -v /home/git/bin/git:/usr/local/git    -v /etc/localtime:/etc/localtime -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker -v /usr/local/shell:/usr/local/shell --name jenkins --restart=always jenkins/jenkins:2.344
+   
    ```
 
 3. 修改镜像下载地址
@@ -264,9 +268,9 @@
 2. 创建挂载目录
 
    ```shel
-   mkdir -p /mydata/nginx/conf
-   mkdir -p /mydata/nginx/log
-   mkdir -p /mydata/nginx/html
+   mkdir -p /home/nginx/conf
+   mkdir -p /home/nginx/log
+   mkdir -p /home/nginx/html
    ```
 
 3. 启动容器并拷贝文件
@@ -275,11 +279,11 @@
    # 生成容器
    docker run --name nginx -p 80:80 -d nginx
    # 将容器nginx.conf文件复制到宿主机
-   docker cp nginx:/etc/nginx/nginx.conf /mydata/nginx/conf/nginx.conf
+   docker cp nginx:/etc/nginx/nginx.conf /home/nginx/conf/nginx.conf
    # 将容器conf.d文件夹下内容复制到宿主机
-   docker cp nginx:/etc/nginx/conf.d /mydata/nginx/conf/conf.d
+   docker cp nginx:/etc/nginx/conf.d /home/nginx/conf/conf.d
    # 将容器中的html文件夹复制到宿主机
-   docker cp nginx:/usr/share/nginx/html /mydata/nginx/
+   docker cp nginx:/usr/share/nginx/html /home/nginx/
    ```
 
 4. 删除正在运行的nginx容器
@@ -291,13 +295,67 @@
 5. 重新运行
 
    ```shell
-   docker run -p 80:80 --name nginx -v /mydata/nginx/conf/nginx.conf:/etc/nginx/nginx.conf -v /mydata/nginx/conf/conf.d:/etc/nginx/conf.d -v /mydata/nginx/log:/var/log/nginx -v /mydata/nginx/html:/usr/share/nginx/html -d nginx
+   docker run -p 80:80 --name nginx -v /home/nginx/conf/nginx.conf:/etc/nginx/nginx.conf -v /home/nginx/conf/conf.d:/etc/nginx/conf.d -v /home/nginx/log:/var/log/nginx -v /home/nginx/html:/usr/share/nginx/html -d nginx
    ```
 
 6. 自动重启
 
    ```shell
    docker update nginx --restart=always
+   ```
+
+## Minio
+
+1. 下载镜像文件
+
+   ```shell
+   docker pull minio/minio
+   ```
+
+2. 创建挂载目录
+
+   ```shell
+   mkdir /home/minio/config
+   mkdir /home/minio/data
+   ```
+
+3. 启动容器
+
+   ```shell
+   docker run -d -p 9000:9000 -p 9001:9001 --name minio -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=leixuesong" -v /home/minio/data:/data -v /home/minio/config:/root/.minio minio/minio server --console-address ":9001" --address ":9000" /data
+   ```
+
+4. 自动重启
+
+   ```shell
+   docker update minio --restart=always
+   ```
+
+## Nexus
+
+1. 下载镜像文件
+
+   ```shell
+   docker pull sonatype/nexus3
+   ```
+
+2. 创建挂载目录
+
+   ```shell
+   mkdir /home/nexus/nexus-data
+   chmod 777 /home/nexus/nexus-data
+   ```
+
+3. 启动容器
+
+   ```shell
+   docker run -d -p 8081:8081 --name nexus -v /home/nexus/nexus-data:/nexus-data sonatype/nexus3
+   ```
+
+4. 自动重启
+
+   ```shell
+   docker update nexus --restart=always
    ```
 
 # Docker常用命令
