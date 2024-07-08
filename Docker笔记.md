@@ -218,19 +218,16 @@
 1. 下载镜像文件
 
    ```shell
-   docker pull jenkins/jenkins:2.385
+   docker pull jenkins/jenkins
    ```
 
 2. 创建实例并启动
 
    ```shel
    chmod 777 /home/jenkins
-   docker run -d -uroot -p 9999:8080 -p 50000:50000 -v /home/jenkins/jenkins_home:/var/jenkins_home -v /home/maven:/usr/local/maven -v /home/git/bin/git:/usr/local/git -v /etc/localtime:/etc/localtime --name jenkins jenkins/jenkins:2.385
-   
-   docker run -d -it -p 9999:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u 0  -v  /home/maven:/usr/local/maven   -v /home/git/bin/git:/usr/local/git    -v /etc/localtime:/etc/localtime -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker -v /usr/local/shell:/usr/local/shell --name jenkins --restart=always jenkins/jenkins:2.344
-   
+   docker run -d -it -p 9999:8080 -p 50000:50000 -u root -v /home/jenkins:/var/jenkins_home -v /home/node:/usr/local/node -v /home/java:/usr/local/java -v /home/maven:/usr/local/maven -v /home/git/bin/git:/usr/local/git -v /etc/localtime:/etc/localtime -v /usr/local/shell:/usr/local/shell -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --name jenkins --restart=always jenkins/jenkins
    ```
-
+   
 3. 修改镜像下载地址
 
    ```shell
