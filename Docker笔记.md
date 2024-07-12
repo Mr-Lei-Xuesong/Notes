@@ -225,12 +225,13 @@
 
    ```shel
    chmod 777 /home/jenkins
-   docker run -d -it -p 9999:8080 -p 50000:50000 -u root -v /home/jenkins:/var/jenkins_home -v /home/node:/usr/local/node -v /home/java:/usr/local/java -v /home/maven:/usr/local/maven -v /home/git/bin/git:/usr/local/git -v /etc/localtime:/etc/localtime -v /usr/local/shell:/usr/local/shell -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --name jenkins --restart=always jenkins/jenkins
+   docker run -d -p 9999:8080 -p 50000:50000 -u root -v /home:/home -v /home/jenkins:/var/jenkins_home -v /home/node:/var/jenkins_home/node -v /home/java:/var/jenkins_home/java -v /home/maven:/var/jenkins_home/maven -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --name jenkins --restart=always jenkins/jenkins
    ```
    
 3. 修改镜像下载地址
 
    ```shell
+   cd /home/jenkins
    vim hudson.model.UpdateCenter.xml
    
    <?xml version='1.1' encoding='UTF-8'?>
@@ -253,6 +254,10 @@
    ```shell
    docker logs jenkins
    ```
+
+6. 配置环境
+   
+   1. 配置maven
 
 ## Nginx
 
