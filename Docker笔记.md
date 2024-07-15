@@ -224,7 +224,7 @@
 2. 创建实例并启动
 
    ```shel
-   docker run --user=root --privileged=true -d -p 9999:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v /home/maven:/usr/local/maven -v /home/java:/usr/local/java -v /home/node:/usr/local/node --name jenkins --restart=always jenkins/jenkins
+   docker run --user=root --privileged=true -d -p 9999:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v /home/maven:/usr/local/maven -v /home/java:/usr/local/java -v /home/node:/usr/local/node -v /etc/localtime:/etc/localtime --name jenkins --restart=always jenkins/jenkins
    ```
    
 3. 修改镜像下载地址
