@@ -224,8 +224,7 @@
 2. 创建实例并启动
 
    ```shel
-   chmod 777 /home/jenkins
-   docker run -d -p 9999:8080 -p 50000:50000 -u root -v /home:/home -v /home/jenkins:/var/jenkins_home -v /home/node:/var/jenkins_home/node -v /home/java:/var/jenkins_home/java -v /home/maven:/var/jenkins_home/maven -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --name jenkins --restart=always jenkins/jenkins
+   docker run --user=root --privileged=true -d -p 9999:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v /home/maven:/usr/local/maven -v /home/java:/usr/local/java -v /home/node:/usr/local/node --name jenkins --restart=always jenkins/jenkins
    ```
    
 3. 修改镜像下载地址
@@ -255,9 +254,35 @@
    docker logs jenkins
    ```
 
-6. 配置环境
-   
-   1. 配置maven
+6. 配置系统变量(系统管理-系统配置-环境变量)
+
+   1. jdk
+
+      ```shell
+      key:JAVA_HOME
+      value:/usr/local/java
+      ```
+
+   2. maven
+
+      ```shell
+      key:MAVEN_HOME
+      value:/usr/local/maven
+      ```
+
+   3. node
+
+      ```shell
+      key:NODE_HOME
+      value:/usr/local/node
+      ```
+
+   4. 系统变量
+
+      ```shell
+      key:PATH+EXTRA
+      value:$NODE_HOME/bin:$MAVEN_HOME/bin
+      ```
 
 ## Nginx
 
