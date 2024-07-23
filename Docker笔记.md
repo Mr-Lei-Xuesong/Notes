@@ -336,7 +336,7 @@
 1. 下载镜像文件
 
    ```shell
-   docker pull minio/minio
+   docker pull minio/minio:latest
    ```
 
 2. 创建挂载目录
@@ -349,14 +349,9 @@
 3. 启动容器
 
    ```shell
-   docker run -d -p 9000:9000 -p 9001:9001 --name minio -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=leixuesong" -v /home/minio/data:/data -v /home/minio/config:/root/.minio minio/minio server --console-address ":9001" --address ":9000" /data
+   docker run -d -p 9000:9000 -p 9001:9001 --restart=always --name minio -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=leixuesong" -v /home/minio/data:/data -v /home/minio/config:/root/.minio minio/minio:latest server --console-address ":9001" --address ":9000" /data
    ```
 
-4. 自动重启
-
-   ```shell
-   docker update minio --restart=always
-   ```
 
 ## Nexus
 
