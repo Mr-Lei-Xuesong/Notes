@@ -349,7 +349,7 @@
 3. 启动容器
 
    ```shell
-   docker run -d -p 9000:9000 -p 9001:9001 --restart=always --name minio -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=leixuesong" -v /home/minio/data:/data -v /home/minio/config:/root/.minio minio/minio:latest server --console-address ":9001" --address ":9000" /data
+   docker run -d -p 9000:9000 -p 9001:9001 --restart=always --name minio -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=leixuesong123..." -v /home/minio/data:/data -v /home/minio/config:/root/.minio minio/minio:latest server --console-address ":9001" --address ":9000" /data
    ```
 
 
@@ -378,6 +378,26 @@
 
    ```shell
    docker update nexus --restart=always
+   ```
+
+## xxl-job
+
+1. 下载镜像文件
+
+   ```shell
+   docker pull xuxueli/xxl-job-admin:2.4.0
+   ```
+
+2. 创建挂载目录
+
+   ```shell
+   mkdir /home/xxl-job
+   ```
+
+3. 启动容器
+
+   ```shell
+   docker run -d -p 8088:8080 --restart=always --name=xxl-job-admin -v /home/xxl-job/logs:/data/applogs -e PARAMS="--spring.datasource.url=jdbc:mysql://175.178.2.155:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 --spring.datasource.username=root --spring.datasource.password=leixuesong" xuxueli/xxl-job-admin:2.4.0
    ```
 
 # Docker常用命令
